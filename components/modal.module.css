@@ -1,0 +1,34 @@
+.background {
+  /* display: none; */
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  border-radius: var(--default-border-radius);
+  backdrop-filter: blur(5px);
+  margin: auto;
+  padding: calc(var(--default-padding) * 3);
+  border: 1px solid #888;
+  width: fit-content;
+  height: 60vh;
+  overflow: auto;
+}
+
+.modalTitle {
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: calc(var(--default-margin) * 2);
+}
+
+.modalContent {
+  white-space: pre-wrap;
+  width: 100%;
+  font-size: large;
+}
