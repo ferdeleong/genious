@@ -10,6 +10,9 @@ const Course = pg.getConnection().define("Course", {
   description: {
     type: DataTypes.TEXT,
     allowNull: false
+  },
+  imageUrl: {
+    type: DataTypes.STRING
   }
 });
 

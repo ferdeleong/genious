@@ -2,6 +2,7 @@ type CourseType = {
   id: string;
   name: string;
   description: string;
+  imageUrl?: string;
   UserId: string;
 };
 

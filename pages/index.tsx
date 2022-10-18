@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Image } from "antd";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -15,11 +15,30 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       {courses.map((course) => (
         <Card
-          title={course.name}
           key={course.id}
-          extra={<Link href={`/course/${course.id}`}>Ver más</Link>}
+          actions={[
+            <Link key="open" href={`/course/${course.id}`}>
+              Ver más
+            </Link>
+          ]}
+          cover={
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                backgroundColor: "lightgray"
+              }}
+            >
+              <Image
+                alt={course.name}
+                src={course?.imageUrl ?? ""}
+                height={200}
+              />
+            </div>
+          }
         >
-          {course.description}
+          <Card.Meta title={course.name} description={course.description} />
         </Card>
       ))}
     </div>

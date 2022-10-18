@@ -17,7 +17,9 @@ export default async function handler(
   };
   if (reqQuery.email) {
     const user = await User.findOne({ where: { email: reqQuery.email } });
-    query.where.UserId = user?.get("id");
+    if (user) {
+      query.where.UserId = user?.get("id");
+    }
   }
   const courses = await Course.findAll(query);
   res.status(200).json(courses);

@@ -23,6 +23,7 @@ const Create: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [courseImage, setCourseImage] = useState<UploadFile>();
 
   const createCourse = async (values: {
     name: string;
@@ -38,6 +39,17 @@ const Create: React.FC = () => {
           email: session!.user.email
         }
       );
+      if (courseImage) {
+        const { data } = await axios.get(
+          `/api/aws/signed-url.get?courseId=${course.id}&fileName=${courseImage.name}&fileType=${courseImage.type}`
+        );
+        await axios.put(data.signedUrl, courseImage, {
+          headers: { "Content-Type": courseImage.type }
+        });
+        await axios.post(`/api/course.update?courseId=${course.id}`, {
+          imageUrl: data.fileUrl
+        });
+      }
       for await (const file of fileList) {
         const { data } = await axios.get(
           `/api/aws/signed-url.get?courseId=${course.id}&fileName=${file.name}&fileType=${file.type}`
@@ -77,6 +89,23 @@ const Create: React.FC = () => {
       />
       <Card>
         <Form onFinish={createCourse}>
+          <Form.Item required>
+            <Upload
+              listType="picture"
+              onRemove={() => {
+                setCourseImage(undefined);
+              }}
+              beforeUpload={(file) => {
+                setCourseImage(file);
+                return false;
+              }}
+              fileList={courseImage ? [courseImage] : []}
+            >
+              <Button icon={<UploadOutlined />}>
+                Selecciona una imagen para el curso
+              </Button>
+            </Upload>
+          </Form.Item>
           <Form.Item
             label="Nombre del curso"
             name="name"
