@@ -1,45 +1,120 @@
-import { AudioOutlined, SettingOutlined } from "@ant-design/icons";
-import { Card, Menu, Typography, Image } from "antd";
-import { ReactElement, useState } from "react";
+import { SettingOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Menu,
+  message,
+  Typography,
+  Upload,
+  UploadFile
+} from "antd";
+import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import styles from "./create.module.css";
 
 const { Title } = Typography;
-
-const testPodcast = {
-  id: "1",
-  title: "Podcast 1",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-};
+const { TextArea } = Input;
 
 const Create: React.FC = () => {
-  const [child, setChild] = useState<ReactElement>(
-    <Card>{testPodcast.description}</Card>
-  );
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const createCourse = async (values: {
+    name: string;
+    description: string;
+  }) => {
+    setLoading(true);
+    try {
+      const session = await getSession();
+      const { data: course } = await axios.post<CourseType>(
+        "/api/course.create",
+        {
+          ...values,
+          email: session!.user.email
+        }
+      );
+      for await (const file of fileList) {
+        const { data } = await axios.get(
+          `/api/aws/signed-url.get?courseId=${course.id}&fileName=${file.name}&fileType=${file.type}`
+        );
+        await axios.put(data.signedUrl, file, {
+          headers: { "Content-Type": file.type }
+        });
+        await axios.post("/api/artifact.create", {
+          name: file.name,
+          type: file.type,
+          url: data.fileUrl,
+          courseId: course.id
+        });
+      }
+    } catch (e) {
+      message.error("No se pudo crear el curso!");
+    } finally {
+      setLoading(false);
+      message.success("Tu contenido ha sido publicado!");
+      router.push("/my-courses");
+    }
+  };
 
   return (
     <div className={styles.container}>
-      <Title>Creando un podcast</Title>
+      <Title>Creando un curso</Title>
       <Menu
         mode="horizontal"
         defaultActiveFirst
         items={[
           {
-            label: "Grabar",
-            key: "record",
-            icon: <AudioOutlined />,
-            onClick: () => setChild(<Card>{testPodcast.description}</Card>)
-          },
-          {
             label: "Configuración",
             key: "configure",
-            icon: <SettingOutlined />,
-            onClick: () => setChild(<Card>{testPodcast.description}</Card>)
+            icon: <SettingOutlined />
           }
         ]}
       />
       <Card>
-        <Image src="/recorder.jpeg" alt="recorder" />
+        <Form onFinish={createCourse}>
+          <Form.Item
+            label="Nombre del curso"
+            name="name"
+            rules={[
+              { required: true, message: "Necesitas un nombre para tu curso!" }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Descripción del curso" name="description">
+            <TextArea rows={4} autoSize={{ minRows: 2, maxRows: 6 }} />
+          </Form.Item>
+          <Form.Item>
+            <Upload
+              listType="picture"
+              onRemove={(fileToRemove) => {
+                const filesToSet = fileList.filter(
+                  (file) => file.uid !== fileToRemove.uid
+                );
+                setFileList(filesToSet);
+              }}
+              beforeUpload={(file) => {
+                setFileList([...fileList, file]);
+                return false;
+              }}
+              fileList={fileList}
+            >
+              <Button icon={<UploadOutlined />}>
+                Selecciona archivos relevantes para tu curso
+              </Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block loading={loading}>
+              Crear curso
+            </Button>
+          </Form.Item>
+        </Form>
       </Card>
     </div>
   );

@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
       <div className={styles.searchContainer}>
         <Input.Search
           className={styles.searchInput}
-          placeholder="Qué quieres escuchar hoy?"
+          placeholder="Qué quieres aprender hoy?"
           onSearch={(value) => setQuery(value)}
         />
       </div>

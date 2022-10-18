@@ -1,16 +1,20 @@
 import { Card } from "antd";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 
-const Home: React.FC = () => {
+const MyCourses: React.FC = () => {
+  const { data: session } = useSession();
   const [courses, setCourses] = useState<CourseType[]>([]);
+
   useEffect(() => {
     axios
-      .get<CourseType[]>("/api/courses.get")
+      .get<CourseType[]>(`/api/courses.get?userId=${session!.user.userId}`)
       .then(({ data }) => setCourses(data));
-  }, []);
+  }, [session]);
+
   return (
     <div className={styles.container}>
       {courses.map((course) => (
@@ -26,4 +30,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default MyCourses;
