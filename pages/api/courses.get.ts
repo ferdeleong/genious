@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Course } from "database/models";
+import { Course, User } from "database/models";
 
 type QueryParams = {
   limit: string;
-  userId: string;
+  email: string;
 };
 
 export default async function handler(
@@ -15,8 +15,9 @@ export default async function handler(
     where: {},
     limit: Number(reqQuery.limit ?? 20)
   };
-  if (reqQuery.userId) {
-    query.where.UserId = reqQuery.userId;
+  if (reqQuery.email) {
+    const user = await User.findOne({ where: { email: reqQuery.email } });
+    query.where.UserId = user?.get("id");
   }
   const courses = await Course.findAll(query);
   res.status(200).json(courses);

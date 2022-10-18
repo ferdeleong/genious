@@ -20,21 +20,6 @@ export default NextAuth({
         }
       });
       return true;
-    },
-    async jwt({ token, profile }) {
-      if (profile) {
-        const user = await User.findOne({ where: { email: profile!.email } });
-        if (user) {
-          token.userId = user.get("id");
-        }
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token.userId) {
-        session.user.userId = token.userId;
-      }
-      return session;
     }
   }
 });

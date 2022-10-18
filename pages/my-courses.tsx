@@ -11,7 +11,7 @@ const MyCourses: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<CourseType[]>(`/api/courses.get?userId=${session!.user.userId}`)
+      .get<CourseType[]>(`/api/courses.get?email=${session!.user.email}`)
       .then(({ data }) => setCourses(data));
   }, [session]);
 
