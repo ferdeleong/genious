@@ -1,16 +1,24 @@
 import { Card, Image } from "antd";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 
 const Home: React.FC = () => {
+  const router = useRouter();
   const [courses, setCourses] = useState<CourseType[]>([]);
+
   useEffect(() => {
     axios
-      .get<CourseType[]>("/api/courses.get")
+      .get<CourseType[]>(
+        router.query.q
+          ? `/api/courses.get?q=${router.query.q}`
+          : "/api/courses.get"
+      )
       .then(({ data }) => setCourses(data));
-  }, []);
+  }, [router.query.q]);
+
   return (
     <div className={styles.container}>
       {courses.map((course) => (
