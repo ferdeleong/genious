@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
 class PostgresDatabase {
   private static instance: PostgresDatabase;
@@ -11,7 +12,8 @@ class PostgresDatabase {
       process.env.POSTGRES_PASSWORD!,
       {
         host: process.env.POSTGRES_HOST!,
-        dialect: "postgres"
+        dialect: "postgres",
+        dialectModule: pg
       }
     );
     this.connection
