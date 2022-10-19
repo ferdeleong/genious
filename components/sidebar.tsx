@@ -30,7 +30,8 @@ const MENU_ITEMS = [
 const Sidebar: React.FC = () => {
   const router = useRouter();
   return (
-    <Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="80" collapsible>
+    <Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="80" collapsible >
+      <img src = {"/nl.png"} width = "80" ></img>
       <Menu
         defaultSelectedKeys={[router.route]}
         theme="dark"
