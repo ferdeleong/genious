@@ -23,6 +23,7 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       {courses.map((course) => (
         <Card
+          style={{ width: "30vw" }}
           key={course.id}
           actions={[
             <Link key="open" href={`/course/${course.id}`}>

@@ -20,6 +20,7 @@ const MyCourses: React.FC = () => {
       {courses.map((course) => (
         <Card
           key={course.id}
+          style={{ width: "30vw" }}
           actions={[
             <Link key="open" href={`/course/${course.id}`}>
               Ver más
