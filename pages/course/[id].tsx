@@ -61,6 +61,24 @@ const Course: React.FC = () => {
               )}
             />
           </Card>
+          <Card
+            cover={
+              <iframe
+                id="webgl_iframe"
+                frameBorder="0"
+                allow="autoplay; fullscreen; vr"
+                allowFullScreen={false}
+                // mozallowfullscreen="true"
+                src="https://play.unity.com/webgl/87287a80-1a07-43d6-910f-ef1d532e146e?screenshot=false&embedType=embed"
+                // width="810"
+                height="200"
+                // onmousewheel=""
+                // webkitallowfullscreen="true"
+              />
+            }
+          >
+            <Card.Meta title="Juego" description="Aprende" />
+          </Card>
         </>
       )}
     </div>
