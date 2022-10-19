@@ -6,19 +6,14 @@ import Sidebar from "components/sidebar";
 import type { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
+import SignIn from "pages/auth/signin";
 import React from "react";
 import { ChildrenProps } from "types/next-auth";
 import "./globals.css";
 
 const AuthWrapper: React.FC<ChildrenProps> = ({ children }) => {
-  const router = useRouter();
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push("/api/auth/signin");
-    }
-  });
+  const { status } = useSession();
+  if (status === "unauthenticated") return <SignIn />;
   if (status === "loading") return <Loader />;
   return children;
 };

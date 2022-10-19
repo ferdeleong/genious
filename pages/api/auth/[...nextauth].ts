@@ -11,15 +11,22 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ profile }): Promise<any> {
-      User.findOrCreate({
-        where: {
-          email: profile.email!
-        },
-        defaults: {
-          email: profile.email!
-        }
-      });
-      return true;
+      // TODO: maybe change for @iepam.mx
+      if (profile.email?.includes("@tec.mx")) {
+        User.findOrCreate({
+          where: {
+            email: profile.email!
+          },
+          defaults: {
+            email: profile.email!
+          }
+        });
+        return true;
+      }
+      return false;
     }
+  },
+  pages: {
+    signIn: "/auth/signin"
   }
 });
