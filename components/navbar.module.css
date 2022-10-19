@@ -12,6 +12,10 @@
   align-items: center;
 }
 
+.avatarContainer:hover {
+  cursor: pointer;
+}
+
 .avatar {
   border-radius: 50px;
   margin-right: 15px;
@@ -28,7 +32,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 50%;
 }
 
 .searchInput {

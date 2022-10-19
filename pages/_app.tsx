@@ -1,5 +1,4 @@
 import { Layout } from "antd";
-import "antd/dist/antd.css";
 import Loader from "components/loader";
 import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";

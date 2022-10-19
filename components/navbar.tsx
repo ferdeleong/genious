@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
           />
         }
       >
-        <Button className={styles.avatarContainer} type="text">
+        <div className={styles.avatarContainer}>
           <Avatar style={{ marginRight: 15 }} size={35} src={user?.image} />
           <div className={styles.nameContainer}>
             <Text style={{ fontSize: 12 }} type="secondary">
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
             </Text>
           </div>
           <DownOutlined />
-        </Button>
+        </div>
       </Dropdown>
     </div>
   );
