@@ -1,5 +1,5 @@
 ## Update
-Page is still running on Vercel but AWS dtabase has been removed
+Page is still running on Vercel but AWS database has been shut down
 
 ## Genious
 A web app built for the Goverment Agency oriented towards senior citizens of Nuevo Leon [IEPAM](https://www.nl.gob.mx/iepam) to help with knowledge transfer from senior citizens to upcoming generations through a minimalistic and easy understanding course platform. For younger generations knowledge is acquired and verified through a Unity platform video game. This platform aids in the sensibilization toward senior citizens for enabling their integration in society
